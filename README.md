@@ -17,3 +17,11 @@ La estructura del proyecto consta de un playbook, playbook.yaml, ubicado en la r
 
 ## Observaciones
 
+El proyecto se han realizado bajo las versiones:
+
+ - Kubernetes: 1.25
+ - Ansible: 2.13.6
+ - Python: 3.8.10
+ - Jinja: 3.1.2
+
+Para la probar el correcto funcionamiento del playbook se ha optado por utilizar el playground de Killercoda con la versión de Kubernetes 1.25 (https://killercoda.com/playgrounds/scenario/kubernetes), sobre la que se ha instalado Ansible.
