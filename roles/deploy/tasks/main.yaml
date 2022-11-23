@@ -1,5 +1,5 @@
 ---
-- name: "get replicas"
+- name: Get replicas
   shell: echo "{{ max_instances if max_instances is defined  else namespaces_number}}"
   register: replicas
 

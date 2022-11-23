@@ -1,36 +1,41 @@
 - name: Play EOS
   hosts: localhost
+  vars:
+    namespace_prefix: eos
+    namespaces_number: 5
+    max_instances: 2
+    app_name: eos-app
   tasks:
-  - name: install pre-requisites
+  - name: Install pre-requisites
     pip:
       name:
       - pyyaml
       - kubernetes
 
-  - name: "Set variables"
+  - name: Set variables
     set_fact:
       pods_and_ns_filename: "pods_and_namespaces.txt"
 
-  - name: create pod-namespace file
+  - name: Create pod-namespace file
     shell: touch {{ pods_and_ns_filename }}
     
-  - name: get path
+  - name: Get absolute path
     shell: pwd
     register: path
 
-  - name: get file
+  - name: Get filepath
     set_fact:
       filepath: "{{ path.stdout }}/{{ pods_and_ns_filename }}"
 
-  - name: deploy_role
+  - name: Set max_instances
+    set_fact:
+      max_instances: "{{ max_instances if max_instances is defined  else namespaces_number}}"
+
+  - name: Deploy role
     include_role:
       name: deploy
     vars:
-      app_name: eos-app
       filename: "{{ filepath }}"
-      namespace_prefix: eos
-      namespaces_number: 5
-      max_instances: 2
       namespace_name: "{{ namespace_prefix + '-%x' | format(item) }}"
       replicas: "{{ (item | int <= max_instances | int ) | ternary(item, max_instances) }}"
     loop: "{{ range(1,  namespaces_number + 1)|list }}"
