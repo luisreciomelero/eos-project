@@ -1,0 +1,37 @@
+- name: Play EOS
+  hosts: localhost
+  tasks:
+  - name: install pre-requisites
+    pip:
+      name:
+      - pyyaml
+      - kubernetes
+
+  - name: "Set variables"
+    set_fact:
+      pods_and_ns_filename: "pods_and_namespaces.txt"
+
+  - name: create pod-namespace file
+    shell: touch {{ pods_and_ns_filename }}
+    
+  - name: get path
+    shell: pwd
+    register: path
+
+  - name: get file
+    set_fact:
+      filepath: "{{ path.stdout }}/{{ pods_and_ns_filename }}"
+
+  - name: deploy_role
+    include_role:
+      name: deploy
+    vars:
+      app_name: eos-app
+      filename: "{{ filepath }}"
+      namespace_prefix: eos
+      namespaces_number: 5
+      max_instances: 2
+      namespace_name: "{{ namespace_prefix + '-%x' | format(item) }}"
+      replicas: "{{ (item | int <= max_instances | int ) | ternary(item, max_instances) }}"
+    loop: "{{ range(1,  namespaces_number + 1)|list }}"
+ 

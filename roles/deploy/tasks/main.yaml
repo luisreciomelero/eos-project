@@ -1,0 +1,24 @@
+---
+- name: "get replicas"
+  shell: echo "{{ max_instances if max_instances is defined  else namespaces_number}}"
+  register: replicas
+
+- name: Create a namespace
+  kubernetes.core.k8s:
+    state: present
+    api_version: v1
+    kind: Namespace
+    name: "{{ namespace_name }}"
+    kubeconfig: '~/.kube/config'
+
+- name: Create deployment
+  command: kubectl create deployment {{ app_name }} -n "{{ namespace_name }}" --image nginx --replicas "{{ replicas }}"
+
+- name: Get Pods and Namespaces
+  command: kubectl get pod --selector app={{ app_name }}  -n "{{ namespace_name}}" -o jsonpath="{range .items[*]}Pod -> {.metadata.name}, Namespace -> {.metadata.namespace}{'\n'}{end}" 
+  register: data
+
+- name: Append data
+  lineinfile:
+    path: "{{ filename }}"
+    line: "{{ data.stdout }}"
