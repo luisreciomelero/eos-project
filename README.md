@@ -17,13 +17,8 @@ El ejercicio consiste en 3 tareas principales:
 
 La estructura del proyecto consta de un playbook, playbook.yaml, ubicado en la raiz del repositorio y un role, ubicado en el directorio roles/deploy.
 
-## Implementación
+## Prerrequisitos
 
-Para la realización de las tareas se ha optado por definir un role con estas, parametrizadas, e iterar para evitar la definición de tareas repetitivas. Estas tareas se encuentran definidas en **/roles/deploy/tasks/main.yaml**
-
-La limitación de máximas replicas por deployment se ha configurado a partir de la variable **max_instances** definida en el fichero **playbook.yaml**. En caso de no estar definida, se crearán tantas replicas como número tenga el namespace.
-
-## Observaciones
 El proyecto se han realizado bajo las versiones:
 
  - Kubernetes: 1.25
@@ -31,12 +26,17 @@ El proyecto se han realizado bajo las versiones:
  - Python: 3.8.10
  - Jinja: 3.1.2
 
+Como collections de Ansible:
+
+- kubernetes.core: 2.3.2
+
 Para la probar el correcto funcionamiento del playbook se ha optado por utilizar el playground de Killercoda con la versión de Kubernetes 1.25 (https://killercoda.com/playgrounds/scenario/kubernetes), sobre la que se ha instalado Ansible.
 
-## Problemas encontrados
+Una vez instalado ansible, se ha utilizado ansible-galaxy, ejecutando **ansible-galaxy collection install -r collections/requirements.yml** desde la raiz del proyecto, para descargar la collection definida en **collections/requirement.yml** y en el fichero **ansible.cfg** se ha incluido el path de donde recuperar estas collections.
 
-En primera instancia, la creación de los deployment en cada namespace se pensó realizar mediante el módulo de kubernetes, al igual que la creación del namespace, sin embargo, al iterar sobre el número de namespaces requerido y tratar de declarar el número de replicas sobre la definición del deployment mediante una expresión jinja2, el resultado era de error al no poder incluir un string como número de replicas.
+## Implementación
 
-La solución adoptada ha sido la creación de los deployment mediante el módulo command de ansible.
+Para la realización de las tareas se ha optado por definir un role con estas, parametrizadas, e iterar para evitar la definición de tareas repetitivas. Estas tareas se encuentran definidas en **/roles/deploy/tasks/main.yaml**
 
-En posteriores iteraciones sería necesario modificar la forma de creación del deployment y encontrar una solución que permita utilizar la creación de los deployment con el módulo de kubernetes.
+La limitación de máximas replicas por deployment se ha configurado a partir de la variable **max_instances** definida en el fichero **playbook.yaml**. En caso de no estar definida, se crearán tantas replicas como número tenga el namespace.
+
