@@ -29,6 +29,8 @@
     ansible.builtin.file:
       path: "{{ filepath }}"
       state: touch
+      mode: '0777'
+
 
   - name: Deploy role
     include_role:
