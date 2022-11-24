@@ -1,8 +1,4 @@
 ---
-- name: Get replicas
-  shell: echo "{{ max_instances if max_instances is defined  else namespaces_number}}"
-  register: replicas
-
 - name: Create a namespace
   k8s:
     state: present
