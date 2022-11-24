@@ -35,9 +35,6 @@
               ports:
               - containerPort: 80
 
-- name: Replicas
-  debug:
-    msg: "Replicas: {{ replicas }}"
 
 - name: Scale deployment h
   k8s_scale:
