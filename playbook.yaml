@@ -5,7 +5,7 @@
   vars:
     namespace_prefix: eos
     namespaces_number: 5
-    #max_instances: 2
+    #max_instances: 2 #Use to limit the number of replicas
     app_name: eos-app
     pods_and_ns_filename: "pods_and_namespaces.txt"
     image: "nginx"
