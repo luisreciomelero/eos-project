@@ -42,7 +42,6 @@
     kind: Deployment
     name: "{{ app_name }}"
     namespace: "{{ namespace_name }}"
-    current_replicas: 1
     replicas: "{{ replicas | int }}"
 
 - name: Get Pods and Namespaces
